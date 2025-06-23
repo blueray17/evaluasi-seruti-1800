@@ -1,0 +1,185 @@
+[[query]]
+id = "g1"
+judul = "G1. Upah, Gaji, Honor, Lembur"
+keterangan = "Upah, Gaji, Honor, Lembur, dll total per Rumah Tangga (R501JumlahK5 + R501JumlahK7)"
+raw = '''
+SELECT 
+  CAST(FLOOR((R501JumlahK5+R501JumlahK7) / 1000000.0) * 1000000 AS VARCHAR(20)) + ' - ' +
+  CAST(FLOOR((R501JumlahK5+R501JumlahK7) / 1000000.0) * 1000000 + 999999 AS VARCHAR(20)) AS rentang_upah,
+  COUNT(*) AS frekuensi
+FROM INTI_RT
+WHERE (R501JumlahK5+R501JumlahK7) is not null
+GROUP BY FLOOR((R501JumlahK5+R501JumlahK7) / 1000000.0)
+ORDER BY FLOOR((R501JumlahK5+R501JumlahK7) / 1000000.0)
+'''
+limit = "1000"
+tipe = "grafik"
+
+[[query]]
+id = "g2"
+judul = "G2. Upah/Gaji dalam Bentuk barang/jasa"
+keterangan = "Upah/Gaji dalam Bentuk barang/jasa total per Rumah Tangga (R501JumlahK6)"
+raw = '''
+SELECT 
+  CAST(FLOOR(R501JumlahK6 / 1000000.0) * 1000000 AS VARCHAR(20)) + ' - ' +
+  CAST(FLOOR(R501JumlahK6 / 1000000.0) * 1000000 + 999999 AS VARCHAR(20)) AS rentang_upah,
+  COUNT(*) AS frekuensi
+FROM INTI_RT
+WHERE R501JumlahK6 is not null
+GROUP BY FLOOR(R501JumlahK6 / 1000000.0)
+ORDER BY FLOOR(R501JumlahK6 / 1000000.0)
+'''
+limit = "1000"
+tipe = "grafik"
+
+[[query]]
+id = "g3"
+judul = "G3. OOD (Surplus Usaha)"
+keterangan = "Surplus Usaha (R502JumlahK5 - R501JumlahK6)"
+raw = '''
+SELECT 
+  CAST(FLOOR((R502JumlahK5 - R501JumlahK6) / 1000000.0) * 1000000 AS VARCHAR(20)) + ' - ' +
+  CAST(FLOOR((R502JumlahK5 - R501JumlahK6) / 1000000.0) * 1000000 + 999999 AS VARCHAR(20)) AS rentang_surplus,
+  COUNT(*) AS frekuensi
+FROM INTI_RT
+WHERE R501JumlahK6 is not null
+GROUP BY FLOOR((R502JumlahK5 - R501JumlahK6) / 1000000.0)
+ORDER BY FLOOR((R502JumlahK5 - R501JumlahK6) / 1000000.0)
+'''
+limit = "1000"
+tipe = "grafik"
+
+[[query]]
+id = "g4"
+judul = "G4. Property Income Diterima"
+keterangan = "Property Income Diterima R503JumlahK3"
+raw = '''
+SELECT 
+  CAST(FLOOR(R503JumlahK3 / 1000000.0) * 1000000 AS VARCHAR(20)) + ' - ' +
+  CAST(FLOOR(R503JumlahK3 / 1000000.0) * 1000000 + 999999 AS VARCHAR(20)) AS prop_diterima,
+  COUNT(*) AS frekuensi
+FROM INTI_RT
+WHERE R501JumlahK6 is not null
+GROUP BY FLOOR(R503JumlahK3 / 1000000.0)
+ORDER BY FLOOR(R503JumlahK3 / 1000000.0)
+'''
+limit = "1000"
+tipe = "grafik"
+
+[[query]]
+id = "g5"
+judul = "G5. Property Income Dibayar"
+keterangan = "Property Income Dibayar R503JumlahK4"
+raw = '''
+SELECT 
+  CAST(FLOOR(R503JumlahK4 / 1000000.0) * 1000000 AS VARCHAR(20)) + ' - ' +
+  CAST(FLOOR(R503JumlahK4 / 1000000.0) * 1000000 + 999999 AS VARCHAR(20)) AS prop_dibayar,
+  COUNT(*) AS frekuensi
+FROM INTI_RT
+WHERE R501JumlahK6 is not null
+GROUP BY FLOOR(R503JumlahK4 / 1000000.0)
+ORDER BY FLOOR(R503JumlahK4 / 1000000.0)
+'''
+limit = "1000"
+tipe = "grafik"
+
+[[query]]
+id = "g6"
+judul = "G6. Transfer Diterima"
+keterangan = "Transfer Diterima (R504JumlahK3+R504JumlahK4)"
+raw = '''
+SELECT 
+  CAST(FLOOR((R504JumlahK3+R504JumlahK4) / 1000000.0) * 1000000 AS VARCHAR(20)) + ' - ' +
+  CAST(FLOOR((R504JumlahK3+R504JumlahK4) / 1000000.0) * 1000000 + 999999 AS VARCHAR(20)) AS prop_dibayar,
+  COUNT(*) AS frekuensi
+FROM INTI_RT
+WHERE R501JumlahK6 is not null
+GROUP BY FLOOR((R504JumlahK3+R504JumlahK4) / 1000000.0)
+ORDER BY FLOOR((R504JumlahK3+R504JumlahK4) / 1000000.0)
+'''
+limit = "1000"
+tipe = "grafik"
+
+[[query]]
+id = "g7"
+judul = "G7. Transfer Dibayar"
+keterangan = "Transfer Dibayar (R504JumlahK5+R504JumlahK6)"
+raw = '''
+SELECT 
+  CAST(FLOOR((R504JumlahK5+R504JumlahK6) / 1000000.0) * 1000000 AS VARCHAR(20)) + ' - ' +
+  CAST(FLOOR((R504JumlahK5+R504JumlahK6) / 1000000.0) * 1000000 + 999999 AS VARCHAR(20)) AS prop_dibayar,
+  COUNT(*) AS frekuensi
+FROM INTI_RT
+WHERE R501JumlahK6 is not null
+GROUP BY FLOOR((R504JumlahK5+R504JumlahK6) / 1000000.0)
+ORDER BY FLOOR((R504JumlahK5+R504JumlahK6) / 1000000.0)
+'''
+limit = "1000"
+tipe = "grafik"
+
+[[query]]
+id = "konsumsi"
+judul = "G4. Konsumsi Per Kapita"
+keterangan = "Konsumsi Rumah Tangga Per Kapita Per Bulan (B432R16K5/Jml ART)"
+raw = '''
+SELECT 
+  CAST(rentang_awal AS VARCHAR(20)) + ' - ' +
+  CAST(rentang_awal + 99999 AS VARCHAR(20)) AS rentang_konsumsi_perkapita,
+  COUNT(*) AS frekuensi
+FROM (
+    SELECT 
+        FLOOR((B432R16K5 / jml.jml_art) / 100000.0) * 100000 AS rentang_awal
+    FROM inti_rt i
+    LEFT JOIN mak_rt m ON i.id_inti = m.id_mak
+    LEFT JOIN (
+        SELECT id_inti AS id_inti_art, COUNT(*) AS jml_art 
+        FROM INTI_ART 
+        GROUP BY id_inti
+    ) jml ON jml.id_inti_art = i.id_inti
+    WHERE jml.jml_art <> 0
+) tabel_konsumsi
+WHERE rentang_awal is not null
+GROUP BY rentang_awal
+ORDER BY rentang_awal
+
+'''
+limit = "1000"
+tipe = "grafik"
+
+
+[[query]]
+id = "spasi"
+judul = "----------------------------------"
+
+[[query]]
+id = "t1"
+judul = "T1. Ada ART usia sekolah, tapi R456K3 = 0"
+keterangan = "Ada ART usia sekolah tetapi tidak ada pengeluaran terkait pendidikan (R456K3)"
+raw = '''
+SELECT ROW_NUMBER() OVER (ORDER BY id_inti) AS no_urut, id_inti, R456K3, jml_art_usia_sekolah,Catatan from inti_rt i 
+left JOIN (
+    SELECT id_inti AS id_inti_art, COUNT(*) AS jml_art_usia_sekolah
+        FROM INTI_ART 
+        where r306>=6 and r306<=18 
+        GROUP BY id_inti
+)jml ON jml.id_inti_art = i.id_inti
+where jml_art_usia_sekolah is not NULL and R456K3 =0
+order by id_inti
+
+'''
+limit = "1000"
+tipe = "tabel"
+
+
+[[query]]
+id = "t2"
+judul = "T2. Rincian Lainnya"
+keterangan = "Rincian 'Lainnya' di kuesioner makanan " 
+raw = '''
+select ROW_NUMBER() OVER (ORDER BY id_mak) AS no_urut,id_mak,
+b41k1, b41k3 from MAK_B41 
+where b41k3 is not null and b41k3 !=''
+order by id_mak
+'''
+limit = "1000"
+tipe = "tabel"

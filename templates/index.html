@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Query Panel</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="/static/script.js"></script>
+    <link href="/static/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="overlay"></div>
+    <div id="judul"><h2>Evaluasi SERUTI BPS Provinsi Lampung</h2></div>
+    <div id="panel-container">
+      <div id="panel-kiri">
+        <h4>Pilih Parameter</h4>
+        <select id="kd_prov">
+          <option value="18">Lampung</option>
+        </select>
+
+        <select id="kd_kab">
+          <option value="00">Semua</option>
+          <option value="01">Kabupaten Lampung Barat</option>
+          <option value="02">Kabupaten Tanggamus</option>
+          <option value="03">Kabupaten Lampung Selatan</option>
+          <option value="04">Kabupaten Lampung Timur</option>
+          <option value="05">Kabupaten Lampung Tengah</option>
+          <option value="06">Kabupaten Lampung Utara</option>
+          <option value="07">Kabupaten Way Kanan</option>
+          <option value="08">Kabupaten Tulang Bawang</option>
+          <option value="09">Kabupaten Pesawaran</option>
+          <option value="10">Kabupaten Pringsewu</option>
+          <option value="11">Kabupaten Mesuji</option>
+          <option value="12">Kabupaten Tulang Bawang Barat</option>
+          <option value="13">Kabupaten Pesisir Barat</option>
+          <option value="71">Kota Bandar Lampung</option>
+          <option value="72">Kota Metro</option>
+        </select>
+
+        <select id="tw">
+          <option value="1">Triwulan 1</option>
+          <option value="2">Triwulan 2</option>
+          <option value="3">Triwulan 3</option>
+          <option value="4">Triwulan 4</option>
+        </select>
+        <h4>Pilih Query</h4>
+        {% for q in query_list %}
+        <div style="margin-bottom: 5px">
+          <button onclick="runQuery('{{ q.id }}',this)">{{ q.judul }}</button>
+          <p style="font-size: 0.9em; color: #666; display: none">
+            {{ q.keterangan }}
+          </p>
+        </div>
+        {% endfor %}
+      </div>
+      <div id="panel-kanan">
+        <h4>Deskripsi</h4>
+        <div id="deskripsi"></div>
+        <h4>Hasil</h4>
+        <canvas id="result-chart" style="display: none"></canvas>
+        <div id="hasil"></div>
+        <br /><br /><br /><br />
+      </div>
+    </div>
+  </body>
+</html>
