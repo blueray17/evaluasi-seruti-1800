@@ -7,7 +7,6 @@ async function runQuery(queryId,buttonElement) {
   const query = await res1.json();
 
   //kosongkan area kanan
-  document.getElementById("hasil").innerHTML = renderTable(null);
   document.getElementById("hasil").innerHTML = "";
   document.getElementById("deskripsi").innerHTML = "";
   
@@ -47,7 +46,10 @@ async function runQuery(queryId,buttonElement) {
   if(data.message=="CSRF token mismatch."){
     alert("Token expired, silahkan perbaharui lagi");
     return;
-  }else if(data.data[0] == null){
+  }else if(data.error = ""){
+    alert("Cek Token atau parameter");
+    return;
+  }else if(typeof data.data == 'undefined'){
     alert("Data tidak tersedia, silahkan pilih parameter lain");
     document.getElementById("result-chart").style.display = "none";
     document.getElementById("hasil").innerHTML = "";

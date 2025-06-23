@@ -147,10 +147,9 @@ limit = "1000"
 tipe = "grafik"
 
 
-
 [[query]]
-judul="------------------------------------------------------------"
-
+id = "spasi"
+judul = "----------------------------------"
 
 [[query]]
 id = "t1"
@@ -175,12 +174,12 @@ tipe = "tabel"
 [[query]]
 id = "t2"
 judul = "T2. Rincian Lainnya"
-keterangan = "Rincian 'Lainnya' di kuesioner makanan"
+keterangan = "Rincian 'Lainnya' di kuesioner makanan " 
 raw = '''
 select ROW_NUMBER() OVER (ORDER BY id_mak) AS no_urut,id_mak,
-b41k1, b41k3 from MAK_B41 where b41k1 in (5,11,19,22,25,32,43,56,62,69,75,88)
+b41k1, b41k3 from MAK_B41 
+where b41k3 is not null and b41k3 !=''
 order by id_mak
-
 '''
 limit = "1000"
 tipe = "tabel"
