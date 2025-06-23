@@ -1,0 +1,30 @@
+[[query]]
+id = "pengeluaran"
+judul = "Distribusi Pengeluaran"
+keterangan = "Menampilkan distribusi pengeluaran rumah tangga per juta dalam bentuk grafik"
+kd_prov = "18"
+kd_kab = "00"
+tw = "1"
+raw = '''
+SELECT 
+  CAST(FLOOR(R501JumlahK5 / 1000000.0) * 1000000 AS VARCHAR(20)) + ' - ' +
+  CAST(FLOOR(R501JumlahK5 / 1000000.0) * 1000000 + 999999 AS VARCHAR(20)) AS rentang_pengeluaran,
+  COUNT(*) AS frekuensi
+FROM INTI_RT
+WHERE R501JumlahK5 BETWEEN 0 AND 1000000000
+GROUP BY FLOOR(R501JumlahK5 / 1000000.0)
+ORDER BY FLOOR(R501JumlahK5 / 1000000.0)
+'''
+limit = "100"
+tipe = "grafik"
+
+[[query]]
+id = "jumlah_data"
+judul = "Jumlah Data"
+keterangan = "Menghitung jumlah baris dalam INTI_RT dalam bentuk tabel"
+kd_prov = "18"
+kd_kab = "00"
+tw = "1"
+raw = "SELECT COUNT(*) AS jumlah_data FROM INTI_RT"
+limit = "1"
+tipe = "tabel"

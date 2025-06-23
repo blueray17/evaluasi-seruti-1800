@@ -1,0 +1,75 @@
+body {
+        font-family: sans-serif;
+        margin: 0;
+      }
+      #judul {
+        background-color: #eee;
+        padding: 5px;
+        text-align: center;
+        margin-bottom: 5px;
+      }
+
+      #panel-container {
+        display: flex;
+      }
+      #panel-kiri {
+        width: 20%;
+        padding: 0 15px 0 15px;
+        border-right: 1px solid #ccc;
+      }
+      #panel-kanan {
+        flex-grow: 1;
+        padding: 0 15px 0 15px;
+        margin-bottom: 30px;
+      }
+      #deskripsi {
+        margin: 0;
+      }
+      #hasil {
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #ccc; /* opsional, biar kelihatan */
+        padding: 10px; /* opsional */
+        }
+      button {
+        margin-bottom: 1px;
+        display: block;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 4px;
+      }
+      th {
+        background-color: #eee;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        display: block;
+        margin-block-start: 10px;
+        margin-block-end: 10px;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+        unicode-bidi: isolate;
+      }
+      select {
+        width: 100%;
+        padding: 4px 6px;
+        margin: 3px 0;
+
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        transition: border 0.3s;
+      }
+
+      select:focus {
+        border-color: #66afe9;
+        outline: none;
+        box-shadow: 0 0 3px rgba(102, 175, 233, 0.6);
+      }
