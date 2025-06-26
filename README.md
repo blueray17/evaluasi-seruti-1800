@@ -11,7 +11,7 @@ requirement :
 
 Cara penggunaan :
   1. git clone, masuk folder evaluasi-seruti-1800
-  2. install requirement
-  3. instal pandas
-  4. masuk virtual environtment : source seruti/bin/activate
+  2. masuk virtual environtment : source seruti/bin/activate
+  3. install requirement
+  4. instal pandas
   5. jalankan : uvicorn main:app --reload
