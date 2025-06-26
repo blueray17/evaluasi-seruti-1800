@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
+import pandas as pd
 import toml
 import os
 import httpx
@@ -23,6 +24,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# Fungsi pembaca dari XLSX
+def load_queries_from_excel(path: str):
+    df = pd.read_excel(path)
+    queries = []
+    for _, row in df.iterrows():
+        queries.append({
+            "id": str(row["id"]),
+            "judul": row["judul"],
+            "keterangan": row.get("keterangan", ""),
+            "raw": row["sql"],
+            "limit": str(row.get("limit", "1000")),
+            "tipe": row.get("tipe", "tabel")
+        })
+    return queries
 
 BASE_DIR = os.path.dirname(__file__)
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
@@ -43,12 +60,12 @@ class QueryParams(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    query_list = toml.load(os.path.join(BASE_DIR, "queries", "query_list.toml"))["query"]
+    query_list = load_queries_from_excel(os.path.join(BASE_DIR, "queries", "query_list.xlsx"))
     return templates.TemplateResponse("index.html", {"request": request, "query_list": query_list})
 
 @app.get("/get-query/{query_id}")
 async def get_query(query_id: str):
-    queries = toml.load(os.path.join(BASE_DIR, "queries", "query_list.toml"))["query"]
+    queries = load_queries_from_excel(os.path.join(BASE_DIR, "queries", "query_list.xlsx"))
     for q in queries:
         if q["id"] == query_id:
             return q
