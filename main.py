@@ -12,8 +12,7 @@ import httpx
 from typing import Dict
 from pathlib import Path
 
-load_dotenv()  # Load .env variables
-ENV_PATH = ".env"
+COOKIES_PATH = os.path.join(os.path.dirname(__file__), "queries/cookies.txt")
 
 app = FastAPI()
 # Middleware untuk mengizinkan CORS
@@ -41,15 +40,24 @@ def load_queries_from_excel(path: str):
         })
     return queries
 
+# fungsi untuk mengambil token
+def load_tokens():
+    """Baca CSRF_TOKEN, XSRF_TOKEN, dan COOKIES dari cookies.txt"""
+    tokens = {"CSRF_TOKEN": "", "XSRF_TOKEN": "", "COOKIES": ""}
+    if os.path.exists(COOKIES_PATH):
+        with open(COOKIES_PATH, "r", encoding="utf-8") as f:
+            for line in f:
+                if "=" in line:
+                    key, value = line.strip().split("=", 1)
+                    if key in tokens:
+                        tokens[key] = value.strip()
+    return tokens
+
 BASE_DIR = os.path.dirname(__file__)
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
-# Load .env variables
-BASE_URL = os.getenv("BASE_URL", "https://webapps.bps.go.id/olah/seruti/resource/query/executeRaw")
-CSRF_TOKEN = os.getenv("CSRF_TOKEN", "")
-XSRF_TOKEN = os.getenv("XSRF_TOKEN", "")
-COOKIES = os.getenv("COOKIES", "")
+BASE_URL = "https://webapps.bps.go.id/olah/seruti/resource/query/executeRaw"
 
 class QueryParams(BaseModel):
     kd_prov: str
@@ -81,13 +89,14 @@ async def proxy(params: QueryParams):
         "limit": params.limit
     }
 
+    tokens = load_tokens()
     headers = {
         "accept": "application/json, text/plain, */*",
         "content-type": "application/json",
-        "x-csrf-token": CSRF_TOKEN,
+        "x-csrf-token": tokens["CSRF_TOKEN"],
         "x-requested-with": "XMLHttpRequest",
-        "x-xsrf-token": XSRF_TOKEN,
-        "cookie": COOKIES,
+        "x-xsrf-token": tokens["XSRF_TOKEN"],
+        "cookie": tokens["COOKIES"],
         "sec-fetch-site": "same-origin",
         "sec-fetch-mode": "cors"
     }
@@ -111,28 +120,15 @@ async def proxy(params: QueryParams):
     except Exception as e:
         return {"error": str(e)}
     
-def update_env_file(new_data: dict):
-    """Update file .env dengan data baru"""
-    if not os.path.exists(ENV_PATH):
-        raise FileNotFoundError(f"{ENV_PATH} tidak ditemukan")
-
-    with open(ENV_PATH, "r", encoding="utf-8") as f:
-        lines = f.readlines()
-
-    # Buat salinan yang akan ditulis ulang
-    updated_lines = []
-    for line in lines:
-        if line.startswith("CSRF_TOKEN="):
-            updated_lines.append(f"CSRF_TOKEN='{new_data.get('CSRF_TOKEN', '').strip()}'\n")
-        elif line.startswith("XSRF_TOKEN="):
-            updated_lines.append(f"XSRF_TOKEN='{new_data.get('XSRF_TOKEN', '').strip()}'\n")
-        elif line.startswith("COOKIES="):
-            updated_lines.append(f"COOKIES='{new_data.get('COOKIES', '').strip()}'\n")
-        else:
-            updated_lines.append(line)
-
-    with open(ENV_PATH, "w", encoding="utf-8") as f:
-        f.writelines(updated_lines)
+def update_cookie_file(new_data: dict):
+    """Update cookies.txt"""
+    lines = [
+        f"CSRF_TOKEN={new_data.get('CSRF_TOKEN', '').strip()}\n",
+        f"XSRF_TOKEN={new_data.get('XSRF_TOKEN', '').strip()}\n",
+        f"COOKIES={new_data.get('COOKIES', '').strip()}\n"
+    ]
+    with open(COOKIES_PATH, "w", encoding="utf-8") as f:
+        f.writelines(lines)
 
 @app.post("/update-env")
 async def update_env(request: Request):
@@ -154,7 +150,7 @@ async def update_env(request: Request):
         print(f"COOKIES   : {cookies}")
         print("=====================\n")
 
-        update_env_file(data)
+        update_cookie_file(data)
 
         return JSONResponse(
             status_code=200,
