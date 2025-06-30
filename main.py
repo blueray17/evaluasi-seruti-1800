@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Body
+from fastapi import FastAPI, Request, Body, Form
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -162,3 +162,30 @@ async def update_env(request: Request):
             status_code=500,
             content={"status": "error", "message": str(e)}
         )
+    
+
+@app.get("/set-cookies-form", response_class=HTMLResponse)
+async def show_cookies_form(request: Request):
+    return templates.TemplateResponse("set_cookies.html", {"request": request})
+
+
+@app.post("/set-cookies-form", response_class=HTMLResponse)
+async def submit_cookies_form(
+    request: Request,
+    CSRF_TOKEN: str = Form(...),
+    XSRF_TOKEN: str = Form(...),
+    COOKIES: str = Form(...)
+):
+    new_data = {
+        "CSRF_TOKEN": CSRF_TOKEN,
+        "XSRF_TOKEN": XSRF_TOKEN,
+        "COOKIES": COOKIES
+    }
+
+    update_cookie_file(new_data)
+
+    return templates.TemplateResponse("set_cookies.html", {
+        "request": request,
+        "message": "Cookies berhasil diperbarui!",
+        "updated": new_data
+    })

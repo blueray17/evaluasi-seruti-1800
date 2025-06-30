@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Cookies</title>
+    <style>
+        textarea { width: 100%; height: 80px; margin-bottom: 15px; }
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; }
+        .btn { padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        .btn:hover { background-color: #0056b3; }
+        .message { margin-top: 15px; color: green; }
+    </style>
+</head>
+<body>
+    <h2>Update Cookies.txt</h2>
+    <form method="post">
+        <label>CSRF_TOKEN:</label><br>
+        <textarea name="CSRF_TOKEN">{{ updated.CSRF_TOKEN if updated else '' }}</textarea><br>
+
+        <label>XSRF_TOKEN:</label><br>
+        <textarea name="XSRF_TOKEN">{{ updated.XSRF_TOKEN if updated else '' }}</textarea><br>
+
+        <label>COOKIES:</label><br>
+        <textarea name="COOKIES">{{ updated.COOKIES if updated else '' }}</textarea><br>
+
+        <button class="btn" type="submit">Update</button>
+    </form>
+
+    {% if message %}
+        <div class="message">{{ message }}</div>
+    {% endif %}
+</body>
+</html>
