@@ -5,9 +5,10 @@ requirement :
   - uvicorn
   - httpx
   - jinja2
-  - toml
-  - dotenv
+  - toml // kalo query disimpan dlm format toml
+  - dotenv // kl setting disimpan di .env
   - pandas <---- pake python3-pandas
+  - python3-multipart <---- untuk form
 
 Cara penggunaan :
   1. git clone, masuk folder evaluasi-seruti-1800
