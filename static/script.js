@@ -1,15 +1,18 @@
 let chartInstance = null;
 let judul = null;
+var count = 0;
 Chart.register(ChartDataLabels);
 
 async function runQuery(queryId,buttonElement) {
-  const res1 = await fetch(`/get-query/${queryId}`);
-  const query = await res1.json();
-
   //kosongkan area kanan
   document.getElementById("hasil").innerHTML = "";
   document.getElementById("deskripsi").innerHTML = "";
+  document.getElementById("loading-gif").innerHTML = "<img src='static/loading_2.gif' width='20' height='20'>";
+  document.getElementById("count").innerHTML = "";
   
+  const res1 = await fetch(`/get-query/${queryId}`);
+  const query = await res1.json();
+
   //ambil parameter
   const kode_prov = document.getElementById("kd_prov").value;
   const kode_kab = document.getElementById("kd_kab").value;
@@ -19,9 +22,6 @@ async function runQuery(queryId,buttonElement) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-//      kd_prov: query.kd_prov,
-//      kd_kab: query.kd_kab,
-//      tw: query.tw,
       kd_prov:kode_prov,
       kd_kab:kode_kab,
       tw:trw,
@@ -38,6 +38,7 @@ async function runQuery(queryId,buttonElement) {
   const paragraph = parentDiv.querySelector("p");
   if (paragraph) document.getElementById("deskripsi").innerText = paragraph.innerText;
   judul = buttonElement.innerText;
+  document.getElementById("loading-gif").innerHTML = "";
   //console.log(judul)
 
   const data = await res2.json();
@@ -59,7 +60,9 @@ async function runQuery(queryId,buttonElement) {
 
   if (query.tipe === "tabel") {
     document.getElementById("result-chart").style.display = "none";
+    document.getElementById("result-chart").innerHTML = "";
     document.getElementById("hasil").innerHTML = renderTable(data);
+    document.getElementById("count").innerHTML = "Total : "+count+" baris";
   } else if (query.tipe === "grafik") {
     const labelKey = Object.keys(data.data[0])[0];
     const valueKey = Object.keys(data.data[0])[1];
@@ -73,13 +76,13 @@ async function runQuery(queryId,buttonElement) {
     document.getElementById("result-chart").style.display = "block";
     renderChart(labels, values);
   }
-  //non blur
-  //document.getElementById("overlay").style.display = "none";
+  
 }
 
 function renderTable(data) {
   if (!data.data || !data.data.length) return "Tidak ada data.";
   const keys = Object.keys(data.data[0]);
+  count = data.data.length;
   let html = "<table><thead><tr>";
   for (const key of keys) html += `<th>${key}</th>`;
   html += "</tr></thead><tbody>";
